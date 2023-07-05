@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>主页</title>
+    <link rel="stylesheet" href="css/eui.css">
+    <style>
+        body{
+            background-image: url("/img/bg.webp");
+            background-size: cover;
+            background-attachment: fixed;
+            margin: auto;
+        }
+        #head-left {
+            width: 400px;
+            text-align: center;
+            position: relative;
+            left: 100px;
+            top: 10px;
+            font-size: 40px;
+            font-family: 华文彩云;
+        }
+
+        #head-middle {
+            position: relative;
+            left: 600px;
+            bottom: 34px;
+            border: rgb(277,277,277) solid;
+            background-color: rgb(277,277,277);
+            border-radius: 20px;
+            width: 380px;
+            height: 40px;
+        }
+
+        #head-right {
+            font-family: 华文琥珀;
+            height: 20px;
+            width: 200px;
+            float: right;
+            position: relative;
+            right: 100px;
+            bottom: 56px;
+        }
+
+        #Carousel-map {
+            position: relative;
+            left: 70px;
+            top: 10px;
+            width: 700px;
+            border-radius: 100px;
+            overflow: hidden;
+            height: 500px;
+            float: left;
+        }
+
+        #Statistic {
+            width: 500px;
+            border: 1px rgb(277,277,277) solid;
+            float: right;
+            position: relative;
+            border-radius: 30px;
+            right: 82px;
+            top: 10px;
+            height: 500px;
+        }
+
+        #div1:hover {
+            background-color: rgb(227, 227, 227)
+        }
+
+        #div2:hover {
+            background-color: rgb(227, 227, 227)
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div id="head-left">
+        <font>校园外卖平台</font>
+    </div>
+    <div id="head-middle">
+        <form action="http://www.baidu.com/baidu">
+            <input style="width: 300px;height: 30px;border-radius: 5px;border: 0;position: relative;top: 4px;left: 4px;text-align: center;
+outline:none;" placeholder="请输入菜品名称!!!" type="text" name="word"></input>
+            <input type="submit" value="搜索"
+                   style="background-color: rgb(277,277,277);border: 0;color: black;position: relative;left: 20px;top:4px"></input>
+        </form>
+    </div>
+    <div id="head-right">
+        <div v-if="isLogin" style="position: relative;width: 300px;float: right;left: 20px;bottom: 20px">
+            <div style="font-size: 30px;position:relative;text-align: center">欢迎{{user.nick}}回来</div>
+            <div>
+                <div style="font-size: 16px;float: right"><a href="javascript:0" @click="logout()">退出登录</a></div>
+                <div style="font-size: 16px;float: right;padding-right: 52px;padding-left: 52px"><a href="/self.html">用户中心</a>
+                </div>
+                <div style="font-size: 16px;float: right"><a href="/upload.html">发布餐饮</a></div>
+            </div>
+        </div>
+        <div v-else>
+            <div style="float: right;margin-left: 60px;"><a href="/login.html">登陆页面</a></div>
+            <div style="float: right;"><a href="/reg.html">注册页面</a></div>
+        </div>
+    </div>
+    <div style="width: 100%;position: relative;bottom: 30px">
+        <el-divider></el-divider>
+    </div>
+    <div style="height: 524px;width:100%;position: relative;bottom: 40px">
+        <div id="Carousel-map">
+            <el-carousel height="500px" style="width: 700px">
+                <el-carousel-item v-for="url in urls">
+                    <img :src="url" alt="" style="width:700px;height: 500px">
+                </el-carousel-item>
+            </el-carousel>
+        </div>
+        <div style="border: 1px rgb(220,223,230) solid;height: 450px;width: 0;float: left;position: relative;left: 120px;top: 30px "></div>
+        <div id="Statistic">
+            <div style="overflow:auto;height: 500px;padding: 2px">
+                <div  style="text-align: center;font-family: 华文行楷;font-size: 40px">评论区</div>
+                <div style="height: 40px;font-family: 华文行楷;font-size: 30px;overflow: auto"
+                     v-for="c in cArr">{{c.nick}}用户对{{c.goodName}}的评价为:{{c.content}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="height: 200px;width: 50px;position: fixed;bottom: 250px;right: 20px">
+        <div id="div1"
+             style="border:1px solid;height: 40px;width: 40px;border-radius: 50%;position: relative;top: 20px;"
+             @click="spc()">
+            <svg t="1678510631053" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="895" width="40" height="40">
+                <path d="M38.4 128a25.6 25.6 0 0 1 25.6-25.6h74.6496a25.6 25.6 0 0 1 24.832 19.4048l27.136 108.5952h748.032a25.6 25.6 0 0 1 24.832 31.7952l-106.6496 426.7008a25.6 25.6 0 0 1-24.832 19.3536H277.3504a25.6 25.6 0 0 1-24.832-19.3536L118.6816 153.6H64a25.6 25.6 0 0 1-25.6-25.6z m165.0688 153.6l93.8496 375.4496H812.032L905.8816 281.6H203.4176z m73.8816 512a38.4 38.4 0 1 0 0 76.8 38.4 38.4 0 0 0 0-76.8z m-89.6 38.4a89.6 89.6 0 1 1 179.2 0 89.6 89.6 0 0 1-179.2 0z m605.8496 0a38.4 38.4 0 1 1 76.8 0 38.4 38.4 0 0 1-76.8 0z m38.4-89.6a89.6 89.6 0 1 0 0 179.2 89.6 89.6 0 0 0 0-179.2z"
+                      fill="#4A4A4A" p-id="896"></path>
+            </svg>
+        </div>
+        <div id="div2"
+             style="border:1px solid;height: 40px;width: 40px;border-radius: 50%;position: relative;top: 60px;"
+             @click="atop()">
+            <svg t="1678511337352" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                 p-id="2684" width="39" height="39">
+                <path d="M928.64 896a2.144 2.144 0 0 1-0.64 0H96a32.032 32.032 0 0 1-27.552-48.288l416-704c11.488-19.456 43.552-19.456 55.104 0l413.152 699.2A31.936 31.936 0 0 1 928.64 896z m-776.576-64h719.84L512 222.912 152.064 832z"
+                      p-id="2685"></path>
+            </svg>
+        </div>
+    </div>
+    <div style="width: 100%;position: relative;bottom: 10px">
+        <el-divider></el-divider>
+    </div>
+    <div id="body" v-for="commodity in commodityArr">
+        <div style="width: 300px;height: 400px;float: left;margin-left: 40px;margin-top: 20px">
+            <el-row>
+                <el-button round type="text" @click="detail(commodity.id)" style="float:left;position: relative;top: 20px">
+                    查看详情
+                </el-button>
+            </el-row>
+            <el-row style="">
+                <el-button round type="text" @click="buy(commodity)" style="float:right;position: relative;bottom: 20px">
+                    点击加入购物车
+                </el-button>
+            </el-row>
+            <h3 style="font-family: 华文行楷;color: red;position: relative;bottom: 90px;">{{commodity.goodName}}:</h3>
+            <img :src="commodity.url" alt="" height="300px" width="300px" style="position: relative;bottom: 90px;border-radius: 30px">
+            <h5 style="position: relative;bottom: 116px">简介:{{commodity.content}}</h5>
+            <h5 style="position: relative;bottom: 180px;float: right;right: 10px">价格:{{commodity.price}}</h5>
+            <h5 style="position: relative;bottom: 130px">发布时间:{{commodity.created}}</h5>
+        </div>
+    </div>
+</div>
+<script src="js/vue.min.js"></script>
+<script src="js/axios.min.js"></script>
+<script src="js/eui.js"></script>
+<script>
+    let v = new Vue({
+        el: "#app",
+        data: {
+            input: '',
+            urls: ["img/1.webp", "img/2.webp", "img/3.webp", "img/4.webp"],
+            isLogin: false,
+            user: {},
+            shoppingCart: {
+                commodityId: 0,
+                goodName: "",
+                price: 0.0,
+                number: 0
+            },
+            commodityArr: [],
+            cArr: []
+        },
+        created: function () {
+            //发请求获取当前登录的用户对象,如果有用户对象则代表登录过反之就是未登录过
+            axios.get("/currentUser").then(function (response) {
+                //把当前登录的用户对象赋值给user
+                v.user = response.data;
+                //此时如果response.data的值是空字符串 代表未登录过
+                v.isLogin = response.data == "" ? false : true;
+            })
+            //发请求获取所有树数据
+            axios.get("/select").then(function (response) {
+                v.commodityArr = response.data;
+            })
+            axios.get("/selectcomment").then(function (response) {
+                v.cArr = response.data;
+            })
+        },
+        methods: {
+            logout() {
+                if (confirm("您确认退出登录吗?")) {
+                    //发出退出登录请求
+                    axios.get("/logout").then(function (response) {
+                        v.isLogin = false;//修改这个变量 页面会自动跟着改变
+                    })
+                }
+            },
+            spc() {
+                axios.get("/currentUser").then(function (response) {
+                    if (response.data == "") {
+                        alert("请先登录!!!")
+                        location.href = "/login.html"
+                    } else {
+                        location.href = "/ShoppingCart.html"
+                    }
+                })
+            },
+            atop() {
+                location.href = "javascript:scroll(0,0)"
+            },
+            detail(id) {
+                location.href = '/detail.html?id=' + id
+            },
+            buy(commodity) {
+                axios.get("/currentUser").then(function (response) {
+                    if (response.data == "") {
+                        alert("请先登录!!!")
+                        location.href = "/login.html"
+                    } else {
+                        let num = window.prompt("请输入购买数量:")
+                        if (new RegExp("^\\+?[1-9][0-9]*$").test(num)) {//纯非零正整数字就是true
+                            if (confirm("您确认添加到购物车吗?")) {
+                                v.shoppingCart.number = parseInt(num)
+                                v.shoppingCart.goodName = commodity.goodName
+                                v.shoppingCart.price = commodity.price
+                                v.shoppingCart.commodityId = commodity.id
+                                v.shoppingCart.url = commodity.url
+
+                                axios.post("/insertShoppingCart", v.shoppingCart).then(function (response) {
+                                    if (response.data == 1) {
+                                        alert("添加成功!")
+                                        location.reload()//加载
+                                    } else {
+                                        alert("添加失败!!!")
+                                    }
+                                })
+                            }
+                        } else {
+                            alert("购买数量不正确,请重新输入购买数量!!")
+                        }
+                    }
+                })
+            },
+            detail(id) {
+                axios.get("/currentUser").then(function (response) {
+                    if (response.data == "") {
+                        alert("请先登录!!!")
+                        location.href = "/login.html"
+                    } else {
+                        location.href = '/detail.html?id=' + id
+                    }
+                })
+            }
+        }
+    })
+
+</script>
+</body>
+</html>

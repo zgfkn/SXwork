@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>充值中心</title>
+    <link rel="stylesheet" href="css/eui.css">
+    <style>
+        body{
+            background-image: url("/img/bg.webp");
+            background-size: cover;
+            background-attachment: fixed;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+<div style="text-align: center;font-size: 30px;font-family: 华文琥珀;position: relative;top: 30px">充值中心</div>
+<div id="app">
+        <el-card style="width: 600px;height: 300px;margin: 0 auto;position: relative;top: 50px;
+  background-color: rgba(255,255,255,0.3)">
+            <el-form style="width: 400px;margin: 30px auto" label-width="60px">
+                <el-form-item label="用户名:" style="font-family: 华文琥珀">
+                    <font>{{user.username}}</font>
+                </el-form-item>
+                <el-form-item label="昵称:" style="font-family: 华文琥珀">
+                    <font>{{user.nick}}</font>
+                </el-form-item>
+                <el-form-item label="余额:" style="font-family: 华文琥珀">
+                    <foont>{{user.purse}}</foont>
+                </el-form-item>
+            </el-form>
+        </el-card>
+        <el-card style="width: 600px;height: 300px;margin: 0 auto;position: relative;
+  background-color: rgba(255,255,255,0.3)">
+            <el-form style="width: 400px;margin: 30px auto" label-width="60px">
+                <el-form-item label="金额:" style="font-family: 华文琥珀">
+                    <el-input type="text" v-model="money"
+                              placeholder="请输入充值金额"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button style="border-radius: 10px;position: relative;left: 30px" @click="trade()">充值</el-button>
+                    <el-button style="border-radius: 10px;position: relative;left: 130px" @click="exit()">返回</el-button>
+                </el-form-item>
+            </el-form>
+        </el-card>
+    </div>
+</div>
+<script src="js/vue.js"></script>
+<script src="js/axios.min.js"></script>
+<script src="js/eui.js"></script>
+<script>
+    let v = new Vue({
+        el: "#app",
+        data: {
+            user: {},
+            money: "0",
+        },
+        created: function () {
+            //发请求获取当前登录的用户对象,如果有用户对象则代表登录过反之就是未登录过
+            axios.get("/currentUser").then(function (response) {
+                //把当前登录的用户对象赋值给user
+                v.user = response.data;
+                //此时如果response.data的值是空字符串 代表未登录过
+                v.isLogin = response.data == "" ? false : true;
+            })
+        },
+        methods: {
+            trade() {
+                if (new RegExp("[1-9]\\d*\\.?\\d*").test(v.money)) {//纯数据就是true
+                    axios.get("/recharge?money=" + parseFloat(v.money)).then(function (response) {
+                        alert("充值成功!")
+                        location.reload()//加载
+                    })
+                } else {
+                    alert("充值金额不正确,请重新输入充值金额!!")
+                }
+            },
+            exit(){
+                location.href="/index.html"
+            }
+        }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户中心</title>
+    <link rel="stylesheet" href="css/eui.css">
+    <style>
+        body{
+            background-image: url("/img/bg.webp");
+            background-size: cover;
+            background-attachment: fixed;
+            margin: auto;
+        }
+        .text {
+            font-size: 14px;
+        }
+
+        .item {
+            margin-bottom: 18px;
+        }
+
+        #div2:hover {
+            background-color: rgb(227, 227, 227)
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div style="position: relative;text-align: center;font-size: 100px;font-family:华文彩云;top: 40px">用户中心</div>
+    <el-card style="width: 600px;height: 300px;margin: 0 auto;position: relative;top: 80px;
+  background-color: rgba(255,255,255,0.3)">
+        <el-form style="width: 400px;margin: 30px auto" label-width="60px">
+            <el-form-item label="用户名:" style="font-family: 华文琥珀">
+                <font>{{user.username}}</font>
+            </el-form-item>
+            <el-form-item label="昵称:" style="font-family: 华文琥珀">
+                <font>{{user.nick}}</font>
+            </el-form-item>
+            <el-form-item label="余额:" style="font-family: 华文琥珀">
+                <foont>{{user.purse}}</foont>
+            </el-form-item>
+        </el-form>
+        <el-link href="/purse.html" type="primary" style="font-size: 20px;position: relative;left: 94px">充值</el-link>
+        <el-link href="/ShoppingCart.html" type="primary" style="font-size: 20px;position: relative;left: 184px">
+            购物车
+        </el-link>
+        <el-link href="/index.html" type="primary" style="font-size: 20px;position: relative;left: 244px">去买买买
+        </el-link>
+        </el-form>
+    </el-card>
+
+    <el-card v-for="commodity in userArr"
+             style="margin: 0 auto 10px;width: 600px;height:300px;position: relative;top: 100px;">
+        <div>
+            <el-button style="float: right; padding: 3px 0" type="text" @click="del(commodity.id)">删除</el-button>
+        </div>
+        <div class="text item" style="font-size: 25px">
+            {{commodity.goodName}}
+        </div>
+        <img :src="commodity.url" style="height: 200px">
+        <div style="position: relative;left: 320px;bottom: 160px">数量:{{commodity.number}}</div>
+        <div style="position: relative;left: 320px;bottom: 120px">发布于：{{commodity.created}}</div>
+    </el-card>
+    <div id="div2" style="float: right;border:1px solid;height: 40px;width: 40px;border-radius: 50%;position: fixed;left: 1320px;top: 400px" @click="atop()">
+    <svg t="1678511337352" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2684" width="39" height="39"><path d="M928.64 896a2.144 2.144 0 0 1-0.64 0H96a32.032 32.032 0 0 1-27.552-48.288l416-704c11.488-19.456 43.552-19.456 55.104 0l413.152 699.2A31.936 31.936 0 0 1 928.64 896z m-776.576-64h719.84L512 222.912 152.064 832z" p-id="2685"></path></svg>
+</div>
+</div>
+
+<script src="js/vue.js"></script>
+<script src="js/axios.min.js"></script>
+<script src="js/eui.js"></script>
+<script>
+    let v = new Vue({
+        el: "#app",
+        data: {
+            user: {},
+            userArr: []
+        },
+        created: function () {
+            //发请求获取当前登录的用户对象,如果有用户对象则代表登录过反之就是未登录过
+            axios.get("/currentUser").then(function (response) {
+                //把当前登录的用户对象赋值给user
+                v.user = response.data;
+                //此时如果response.data的值是空字符串 代表未登录过
+                v.isLogin = response.data == "" ? false : true;
+            })
+            //查询当前登录用户发布的所有树
+            axios.get("/selectSelf").then(function (response) {
+                v.userArr = response.data;
+            })
+        },
+        methods: {
+            del(id) {
+                if (confirm("您确认删除此商品吗?")) {
+                    alert(id)
+                    axios({
+                        method:'post',
+                        headers:{
+                            "Content-Type":"application/json"
+                        },
+                        url:'http://localhost:8090/delete',
+                        data: JSON.stringify(id)
+                    }).then(function (response){
+                        alert("删除成功")
+                        location.reload();//刷新页面
+                    })
+                }
+            },
+            atop() {
+                location.href = "javascript:scroll(0,0)"
+            }
+        }
+    })
+</script>
+</body>
+</html>
